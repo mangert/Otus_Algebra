@@ -1,4 +1,6 @@
+#pragma once
 #include <iostream>
+#include "matrix.h"
 
 class Pow {
 
@@ -29,7 +31,7 @@ public:
 		}
 
 		return result;
-	}
+	}	
 
 	//Функция возведения в степень через двоичное разложение показателя степени
 	double static binary_pow(double base, uint32_t exp) {					

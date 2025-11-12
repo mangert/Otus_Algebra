@@ -12,7 +12,13 @@ endif()
 project ("Algebra")
 
 # Add source to this project's executable.
-add_executable (Algebra "src/main.cpp"  "src/pow.cpp" "src/matrix.cpp" "headers/matrix.h")
+add_executable (Algebra "src/main.cpp" "src/fib.cpp")
+
+# Указываем где искать заголовки
+target_include_directories(Algebra PRIVATE
+    ${CMAKE_SOURCE_DIR}/headers
+    ${CMAKE_SOURCE_DIR}/src
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET Algebra PROPERTY CXX_STANDARD 20)

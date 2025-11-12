@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 template <typename T>
 class Matrix final {
@@ -9,10 +10,37 @@ class Matrix final {
 public:
     Matrix() = delete; //матрицу без размеров создать нельзя
 
+
     Matrix(int rows, int columns) : size_row(rows), size_col(columns) {
         matrix = new T* [size_row];
         for (int i = 0; i < size_row; ++i) {
             matrix[i] = new T[size_col]{}; //инициализация по умолчанию
+        }
+    }
+
+    Matrix(std::initializer_list<std::initializer_list<T>> init) {
+        size_row = init.size();
+        if (size_row == 0) throw std::invalid_argument("Empty matrix");
+
+        size_col = init.begin()->size();
+        if (size_col == 0) throw std::invalid_argument("Empty rows");
+
+        // Проверка размеров
+        for (const auto& row : init) {
+            if (row.size() != size_col) {
+                throw std::invalid_argument("Inconsistent row sizes");
+            }
+        }
+
+        // Выделение памяти
+        matrix = new T * [size_row];
+        auto it = init.begin();
+        for (int i = 0; i < size_row; ++i, ++it) {
+            matrix[i] = new T[size_col];
+            auto row_it = it->begin();
+            for (int j = 0; j < size_col; ++j, ++row_it) {
+                matrix[i][j] = *row_it;
+            }
         }
     }
 
@@ -79,13 +107,16 @@ public:
     int rows() const { return size_row; }
     int cols() const { return size_col; }
 
+    //операции с матрицами
+    //перемножение матриц
     template<typename U>
     auto operator*(const Matrix<U>& other) const->Matrix<decltype(T{} * U{})> {
-        if (size_col != other.rows()) {
+        if (size_col != other.rows()) { //проверяем, что матрицы могут быть перемножены
             throw std::invalid_argument("Matrix dimensions don't match for multiplication");
         }
 
-        using ResultType = decltype(T{} * U{});
+        using ResultType = decltype(T{} * U{}); //тип элементов новой матрицы
+        
         Matrix<ResultType> result(size_row, other.cols());
 
         for (int i = 0; i < size_row; ++i) {
@@ -96,6 +127,58 @@ public:
             }
         }
         return result;
+    };
+
+    //только для одинаковых типов шаблона (не можем менять шаблонный тип для this)
+    Matrix<T>& operator*=(const Matrix<T>& other) {
+
+        *this = (*this) * other;
+        return *this;
+    }
+
+    //возведение в степень
+    Matrix<T> pow(uint32_t exp) const {
+        
+        if (size_col != size_row) { //проверяем, что матрица квадратная
+            throw std::invalid_argument("Matrix must be square for exponentiation");
+        }
+        if (exp == 0) {
+            return Matrix<T>::identity(size_row);
+        } 
+
+        Matrix<T> result = Matrix<T>::identity(size_row);
+        Matrix<T> temp = *this;
+
+        while (exp > 0) {
+            if (exp & 1) {
+                result *= temp;
+            }
+            temp *= temp;
+            exp >>= 1;
+        }        
+        
+        return result;
+    }
+
+    //вспомогательный метод вывода матрицы
+    void print_m() const {
+        
+        for (int row = 0; row < size_row; ++row) {
+            for (int col = 0; col < size_col; ++col) {
+                std::cout << matrix[row][col] << " ";
+                
+            }
+        std::cout << "\n";
+        }
+    };
+private:
+    
+    static Matrix<T> identity(int size) {
+        Matrix<T> result(size, size);
+        for (int i = 0; i < size; ++i) {
+            result(i, i) = T{ 1 };
+        }
+        return result;       
     };
 
 private:
