@@ -1,6 +1,7 @@
-#pragma once
+п»ї#pragma once
 #include <iostream>
 
+//С€Р°Р±Р»РѕРЅРЅС‹Р№ РєР»Р°СЃСЃ РјР°С‚СЂРёС†
 template <typename T>
 class Matrix final {
     
@@ -8,13 +9,12 @@ class Matrix final {
         "Matrix can only be instantiated with arithmetic types");
 
 public:
-    Matrix() = delete; //матрицу без размеров создать нельзя
-
+    Matrix() = delete; //РјР°С‚СЂРёС†Сѓ Р±РµР· СЂР°Р·РјРµСЂРѕРІ СЃРѕР·РґР°С‚СЊ РЅРµР»СЊР·СЏ
 
     Matrix(int rows, int columns) : size_row(rows), size_col(columns) {
         matrix = new T* [size_row];
         for (int i = 0; i < size_row; ++i) {
-            matrix[i] = new T[size_col]{}; //инициализация по умолчанию
+            matrix[i] = new T[size_col]{}; //РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
         }
     }
 
@@ -25,14 +25,14 @@ public:
         size_col = init.begin()->size();
         if (size_col == 0) throw std::invalid_argument("Empty rows");
 
-        // Проверка размеров
+        // РџСЂРѕРІРµСЂРєР° СЂР°Р·РјРµСЂРѕРІ
         for (const auto& row : init) {
             if (row.size() != size_col) {
                 throw std::invalid_argument("Inconsistent row sizes");
             }
         }
 
-        // Выделение памяти
+        // Р’С‹РґРµР»РµРЅРёРµ РїР°РјСЏС‚Рё
         matrix = new T * [size_row];
         auto it = init.begin();
         for (int i = 0; i < size_row; ++i, ++it) {
@@ -44,7 +44,7 @@ public:
         }
     }
 
-    // Конструктор копирования
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
     Matrix(const Matrix& other) : size_row(other.size_row), size_col(other.size_col) {
         matrix = new T* [size_row];
         for (int i = 0; i < size_row; ++i) {
@@ -55,7 +55,7 @@ public:
         }
     }
 
-    // Конструктор перемещения
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРµСЂРµРјРµС‰РµРЅРёСЏ
     Matrix(Matrix&& other) noexcept
         : size_row(other.size_row), size_col(other.size_col), matrix(other.matrix) {
         other.matrix = nullptr;
@@ -72,16 +72,16 @@ public:
         }
     }
 
-    // Оператор присваивания
+    // РћРїРµСЂР°С‚РѕСЂ РїСЂРёСЃРІР°РёРІР°РЅРёСЏ
     Matrix& operator=(const Matrix& other) {
         if (this != &other) {
-            // Освобождаем старую память
+            // РћСЃРІРѕР±РѕР¶РґР°РµРј СЃС‚Р°СЂСѓСЋ РїР°РјСЏС‚СЊ
             for (int i = 0; i < size_row; ++i) {
                 delete[] matrix[i];
             }
             delete[] matrix;
 
-            // Выделяем новую и копируем
+            // Р’С‹РґРµР»СЏРµРј РЅРѕРІСѓСЋ Рё РєРѕРїРёСЂСѓРµРј
             size_row = other.size_row;
             size_col = other.size_col;
             matrix = new T * [size_row];
@@ -95,27 +95,27 @@ public:
         return *this;
     }
 
-    //Получаем содержание матрицы:
-    // Методы для доступа к элементам
+    //РџРѕР»СѓС‡Р°РµРј СЃРѕРґРµСЂР¶Р°РЅРёРµ РјР°С‚СЂРёС†С‹:
+    // РњРµС‚РѕРґС‹ РґР»СЏ РґРѕСЃС‚СѓРїР° Рє СЌР»РµРјРµРЅС‚Р°Рј
     T& operator()(int row, int col) { 
         return matrix[row][col]; 
     }
     const T& operator()(int row, int col) const {
         return matrix[row][col]; 
     }
-    //размеры матрицы
+    //СЂР°Р·РјРµСЂС‹ РјР°С‚СЂРёС†С‹
     int rows() const { return size_row; }
     int cols() const { return size_col; }
 
-    //операции с матрицами
-    //перемножение матриц
+    //РѕРїРµСЂР°С†РёРё СЃ РјР°С‚СЂРёС†Р°РјРё
+    //РїРµСЂРµРјРЅРѕР¶РµРЅРёРµ РјР°С‚СЂРёС†
     template<typename U>
     auto operator*(const Matrix<U>& other) const->Matrix<decltype(T{} * U{})> {
-        if (size_col != other.rows()) { //проверяем, что матрицы могут быть перемножены
+        if (size_col != other.rows()) { //РїСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РјР°С‚СЂРёС†С‹ РјРѕРіСѓС‚ Р±С‹С‚СЊ РїРµСЂРµРјРЅРѕР¶РµРЅС‹
             throw std::invalid_argument("Matrix dimensions don't match for multiplication");
         }
 
-        using ResultType = decltype(T{} * U{}); //тип элементов новой матрицы
+        using ResultType = decltype(T{} * U{}); //С‚РёРї СЌР»РµРјРµРЅС‚РѕРІ РЅРѕРІРѕР№ РјР°С‚СЂРёС†С‹
         
         Matrix<ResultType> result(size_row, other.cols());
 
@@ -129,24 +129,24 @@ public:
         return result;
     };
 
-    //только для одинаковых типов шаблона (не можем менять шаблонный тип для this)
+    //С‚РѕР»СЊРєРѕ РґР»СЏ РѕРґРёРЅР°РєРѕРІС‹С… С‚РёРїРѕРІ С€Р°Р±Р»РѕРЅР° (РЅРµ РјРѕР¶РµРј РјРµРЅСЏС‚СЊ С€Р°Р±Р»РѕРЅРЅС‹Р№ С‚РёРї РґР»СЏ this)
     Matrix<T>& operator*=(const Matrix<T>& other) {
 
         *this = (*this) * other;
         return *this;
     }
 
-    //возведение в степень
+    //РІРѕР·РІРµРґРµРЅРёРµ РІ СЃС‚РµРїРµРЅСЊ
     Matrix<T> pow(uint32_t exp) const {
         
-        if (size_col != size_row) { //проверяем, что матрица квадратная
+        if (size_col != size_row) { //РїСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РјР°С‚СЂРёС†Р° РєРІР°РґСЂР°С‚РЅР°СЏ
             throw std::invalid_argument("Matrix must be square for exponentiation");
         }
-        if (exp == 0) {
+        if (exp == 0) { //РІРѕР·РІСЂР°С‰Р°РµРј РµРґРёРЅРёС‡РЅСѓСЋ РјР°С‚СЂРёС†Сѓ
             return Matrix<T>::identity(size_row);
         } 
 
-        Matrix<T> result = Matrix<T>::identity(size_row);
+        Matrix<T> result = Matrix<T>::identity(size_row); //Р±Р°Р·РѕРІС‹Р№ СЃР»СѓС‡Р°Р№ - РµРґРёРЅРёС‡РєР°
         Matrix<T> temp = *this;
 
         while (exp > 0) {
@@ -160,7 +160,7 @@ public:
         return result;
     }
 
-    //вспомогательный метод вывода матрицы
+    //РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Р№ РјРµС‚РѕРґ РІС‹РІРѕРґР° РјР°С‚СЂРёС†С‹
     void print_m() const {
         
         for (int row = 0; row < size_row; ++row) {

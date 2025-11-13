@@ -12,7 +12,7 @@ endif()
 project ("Algebra")
 
 # Add source to this project's executable.
-add_executable (Algebra "src/main.cpp" "src/fib.cpp")
+add_executable (Algebra "src/main.cpp" "src/fib.cpp" "src/primes.cpp")
 
 # Указываем где искать заголовки
 target_include_directories(Algebra PRIVATE

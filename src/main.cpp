@@ -2,6 +2,7 @@
 #include "pow.cpp"
 #include "fib.cpp"
 #include "matrix.h"
+#include "primes.cpp"
 
 // === Класс Tickets - умеет считать количество "счастливых билетов" ===
 /*class Tickets {
@@ -112,21 +113,11 @@ private:
 // === main  ===
 int main() {
 	setlocale(LC_ALL, "Russian");
-
-	//double_t x = Pow::_pow(1.0001, 10000);
-	double_t x = Pow::binary_pow(1.0001, 10000);
-	std::cout << x << std::endl;
+	Prime::eratosphen_(10);
 	
-	Matrix<int> matrix{ {1,2}, {3, 4}, {5,6} };
+	
 
 	
-	matrix.print_m();
-
-	auto f = Fibonacci::iter_fibonacci(1000000);
-
-	std::cout << f;
-
-
 	
 	//Tickets solver;	//экземляр класса с решением задачи
 

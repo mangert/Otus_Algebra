@@ -1,32 +1,65 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 #include "matrix.h"
 
+//класс умеет рассчитывать n-е число фибоначчи несколькими способами
 class Fibonacci final {
-
 public:
-
-    //����������� �������� ������� ����� ���������
+    //рекурсивный алгоритм расчета чисел фибоначчи
     uint64_t static req_fibonacci(uint32_t n) {
-        if (n < 2) return 1;        
+        if (n == 0) return 0;
+        if (n == 1 || n == 2) return 1;
         return req_fibonacci(n - 1) + req_fibonacci(n - 2);
     }
 
-    //����������� �������� ������� ����� ���������
-    uint64_t static iter_fibonacci(uint32_t n) {
+    //итеративный алгоритм расчета чисел фибоначчи
+    uint64_t static iter_fibonacci(uint32_t n) {                        
         
-        if (n < 3) return 1;        
-        uint64_t f1 = 1;        
-        uint64_t f2 = 1;
+        if (n == 0) return 0;
         
-        for (uint32_t i = 2; i != n; ++i) {
-            uint64_t temp = f2;
-            f2 += f1;
-            f1 = temp;            
-        }       
+        uint64_t prev = 1;        
+        uint64_t current = 1;
+        
+        for (uint32_t i = 2; i < n; ++i) {
+            uint64_t next = prev + current;
+            prev = current;
+            current = next;            
+        }
+        return current;
+    }
+    
+    //расчет чисел фибоначчи по формуле золотого сечения
+    uint64_t static gold_fibonacci(uint32_t n) {
+       
+        //проверяем границу n
+        if (n > MAX_N_GOLDEN_RATIO) {
+            throw std::overflow_error("n is too large for golden ratio formula");                        
+        }
 
-        return f2;
+        long double result = std::pow(FI, n) * INV_SQRT5 + 0.5L;
+        
+        return static_cast<uint64_t>(std::floor(result));
+    }
+    
+    //расчет чисел фибоначчи через матрицу
+    uint64_t static matrix_fibonacci(uint32_t n) {
+        
+        if (n == 0) return 0;
+
+        Matrix<uint64_t> init{ { 1, 1 }, { 1, 0} }; //базовый случай
+
+        Matrix<uint64_t> res = init.pow(n - 1);
+        
+        return res(0, 0);
     }
 
+private: 
+    // Математические константы с высокой точностью
+    static constexpr long double FI = 1.61803398874989484820458683436563811772030917980576L;
+    static constexpr long double SQRT5 = 2.23606797749978969640917366873127623544061835961153L;
+    static constexpr long double INV_SQRT5 = 0.4472135954999579392818347337462552470881236719223L;
 
+    // Максимальное n для точного вычисления по формуле золотого сечения
+    // Вычислено как: floor(ln(LDBL_MAX) / ln(FI)) = 1474
+    static constexpr uint32_t MAX_N_GOLDEN_RATIO = 1474;
 };
