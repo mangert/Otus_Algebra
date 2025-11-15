@@ -3,118 +3,41 @@
 #include "fib.cpp"
 #include "matrix.h"
 #include "primes.cpp"
-
-// === Класс Tickets - умеет считать количество "счастливых билетов" ===
-/*class Tickets {
-public:
-	//функция подсчета количества счастливых билетов
-	uint_fast64_t tickets(size_t n) {
-
-		constexpr size_t digits = 10; //10 цифр от 0 до 9		
-		// определим, максимальную сумму и сколько вариантов суммы у нас есть - длину массива сумм		
-		const size_t max_sum = n * 9;
-		const size_t len = max_sum + 1;
-
-		//частоты вхождения каждой суммы, индекс массива - сама сумма
-		std::vector<uint_fast64_t> frequency(len, 0);
-
-		//заполняем массив сумм "слоями"		
-		frequency[0] = 1; //Базовый случай - для порядка n = 0;
-
-		for (int layer = 0; layer != n; ++layer) {
-			std::vector<uint_fast64_t> temp(len, 0); //временный массив для слоя
-
-			for (int sum_idx = 0; sum_idx != len; ++sum_idx) {
-
-				if (frequency[sum_idx] == 0) continue; //нули прибавлять не будем
-
-				//граница вложенного цикла - ограничена суммой текущего индекса строки и максимальной цифрой
-				const int max_digit = std::min(digits, len - sum_idx);
-				//формируем новые значения - идем "от нуля к 9" и добавляем со сдвигом значение из предыдущего слоя
-				for (int digit = 0; digit != max_digit; ++digit) {
-					temp[sum_idx + digit] += frequency[sum_idx];
-				}
-			}
-
-			frequency = std::move(temp); //заменяем результирующий массив дополненым слоем
-		}
-
-		// считаем результат - складываем частоты вхождения каждой суммы, возведенные в квадрат
-		uint_fast64_t result = 0;
-		for (auto& item : frequency) {
-			result += item * item;
-		}
-
-		return result;
-	}
-};*/
-
-/*// === Класс Test  ===
-class Test {
-
-public:
-	Test(std::function<uint_fast64_t(size_t)> run) : test_run(run) {} // в конструкторе передаем тестируемую функцию
-
-	//основная функция тестирования
-	void run()
-	{
-		namespace fs = std::filesystem;
-
-		int iter = 0;
-		while (true)
-		{
-			std::string fileIn = getTestPath(iter, "in"); //файл с входными данные
-			std::string fileOut = getTestPath(iter, "out"); //файл с выходными данные
-			if (!fs::exists(fileIn) || !fs::exists(fileOut))
-				break;
-
-			//забираем данные из файлов
-			std::string input = readFile(fileIn);
-			std::string output = readFile(fileOut);
-
-			//вызываем тестируемую функцию
-			std::string x = std::to_string(test_run(std::stoi(input)));
-			if (x == output) {
-				std::cout << "Тест " << iter << " OK: " << x << "\n";
-			}
-			else {
-				std::cout << "Тест " << iter << "  ошибка:  " << x << " ожидалось: " << output << "\n";
-			}
-			++iter;
-		}
-	}
-private: //служебные функции
-
-	//получение пути к файлу с тестами
-	std::string getTestPath(int testNum, const std::string& extension) {
-		std::string path = std::string(TEST_DIR) + "/test." +
-			std::to_string(testNum) + "." + extension;
-
-		return path;
-	}
-
-	//считываем содержание файла
-	std::string readFile(const std::string& filename) {
-		std::ifstream file(filename);
-		if (!file.is_open()) {
-			throw std::runtime_error("Cannot open file: " + filename);
-		}
-		std::string content;
-		std::getline(file, content);
-		file.close();
-		return content;
-	}
-
-private:
-	//функция для тестирования
-	std::function<uint_fast64_t(size_t)> test_run;
-};*/
+#include "test.h"
 
 // === main  ===
 int main() {
-	setlocale(LC_ALL, "Russian");
-	Prime::eratosphen_(10);
+	setlocale(LC_ALL, "Russian");	
 	
+	//1. Тестирование функций возведения в степень	
+	std::cout << "\n1. Возведение в степень" << "\n";
+	std::cout << "* 1.a. Итеративное возведение в степень: Pow::simple_pow" << "\n";
+
+	Test<double, double, uint64_t> test_iter(Pow::simple_pow, "3.Power");
+	test_iter.run();
+	std::cout << "\n-------------------------------------------------\n";
+	
+	std::cout << "* 1.b. Возведение в степень через домножение: Pow::quick_pow" << "\n";
+	
+	Test<double, double, uint64_t> test_quick(Pow::quick_pow, "3.Power");
+	test_quick.run();
+	std::cout << "\n-------------------------------------------------\n";
+
+	std::cout << "* 1.c. Возведение в степень через двоичное разложение показателя: Pow::binary_pow" << "\n";
+
+	Test<double, double, uint64_t> test_bin(Pow::binary_pow, "3.Power");
+	test_bin.run();
+	std::cout << "\n*************************************************\n";
+
+	//2. Тестирование функций получения чисел фибоначчи
+	std::cout << "\n2. Числа Фибоначчи" << "\n";
+	std::cout << "* 2.a. Рекурсивный алгоритм расчета: Fibonacci::req_fibonacci" << "\n";
+	
+	Test<uint64_t, uint32_t> test_req(Fibonacci::req_fibonacci, "4.Fib");
+	test_req.run();
+	std::cout << "\n-------------------------------------------------\n";
+
+	//3. Тестирование функций количества простых чисел
 	
 
 	
