@@ -12,7 +12,7 @@ public:
 
     // Разные реализации is_prime
     //перебор делитетелй
-    bool is_prime_naive(size_t num) {
+    bool static is_prime_naive(size_t num) {
         for (size_t i = 2; i < num; ++i) {
             if (num % i == 0) return false;
         }
@@ -20,7 +20,7 @@ public:
     }
 
     //перебор делителей до корня из num
-    bool is_prime_lim(size_t num) {       
+    bool static is_prime_lim(size_t num) {
         
         size_t lim = static_cast<size_t>(std::sqrt(num));
         for (size_t i = 2; i <= lim; ++i) {
@@ -30,7 +30,7 @@ public:
     }
 
     //перебор делителей до корня из num с пропуском четных
-    bool is_prime_optimized(size_t num) {
+    bool static is_prime_optimized(size_t num) {
         if (num < 2) return false;
         if (num == 2) return true;
         if (num % 2 == 0) return false;
@@ -43,7 +43,7 @@ public:
     }
 
     //перебор делителей до корня из num с делением только на простые числа (прыжки на 6 (6k - 1 / 6k + 1))
-    bool is_prime_6k(size_t num) {
+    bool static is_prime_6k(size_t num) {
         if (num < 2) return false;
         if (num == 2 || num == 3) return true;
         if (num % 2 == 0 || num % 3 == 0) return false;
@@ -51,7 +51,8 @@ public:
         size_t lim = static_cast<size_t>(std::sqrt(num));
 
         for (size_t i = 5; i <= lim; i += 6) {
-            if (num % i == 0) return false;     
+            if (num % i == 0) return false;      // проверяем 6k-1
+            if (num % (i + 2) == 0) return false; // проверяем 6k+1
         }
         return true;
     }

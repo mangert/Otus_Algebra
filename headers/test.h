@@ -13,8 +13,8 @@ public:
 
     Test(TestFunction run, const std::string& test_folder)
         : test_run(run), folder(test_folder) {
-    }
-
+    }    
+    
     void run() {
         namespace fs = std::filesystem;
 
@@ -34,8 +34,8 @@ public:
     }
 
 private:
+    //внутренняя функция запуска одного теста
     void _run(int testNum, const std::vector<std::string>& inputs, const std::string& expected) {
-        
         // Форматируем аргументы для вывода
         std::string args_str;
         if (inputs.size() == 1) {
@@ -44,19 +44,24 @@ private:
         else if (inputs.size() == 2) {
             args_str = "base=" + inputs[0] + ", exp=" + inputs[1];
         }
-
+        //форматируем номер теста
+        std::ostringstream out_stream;
+        out_stream << "Тест " << std::setw(2) << std::setfill('0') << testNum;
+        
         auto start = std::chrono::high_resolution_clock::now();
-        try {
-            auto result = call_function(inputs);
-            auto end = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
+        try {
+            //вызываем тестируемую функцию
+            auto result = call_function(inputs); 
+            auto end = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();            
+            
+            //проверяем результат
             // Для всех типов - численное сравнение
             if constexpr (std::is_arithmetic_v<ResultType>) {
                 ResultType result_val = result;
-                ResultType expected_val = static_cast<ResultType>(parse_double(expected));                
+                ResultType expected_val = static_cast<ResultType>(parse_double(expected));
 
-                // Сравниваем с допуском для вещественных чисел
                 double tolerance = 1e-10;
                 bool is_equal;
 
@@ -68,41 +73,66 @@ private:
                 }
 
                 if (is_equal) {
-                    std::cout << "Тест " << testNum << " OK: " << args_str
-                        << " результат: " << result_val
-                        << " время: " << duration << "us\n";
+                    out_stream << " OK: " << args_str
+                        << " результат: ";
+
+                    if constexpr (std::is_integral_v<ResultType>) {
+                        out_stream << result_val;
+                    }
+                    else {
+                        out_stream << std::setprecision(15) << result_val;
+                    }
+
+                    out_stream << " время: " << duration << "us";
                 }
                 else {
                     double diff = std::abs(static_cast<double>(result_val) - static_cast<double>(expected_val));
-                    std::cout << "Тест " << testNum << " ОШИБКА: " << args_str
-                        << " результат: " << result_val
-                        << " ожидалось: " << expected_val
-                        << " разница: " << std::scientific << diff << std::fixed
-                        << " время: " << duration << "us\n";
+                    out_stream << " ОШИБКА: " << args_str
+                        << " результат: ";
+
+                    if constexpr (std::is_integral_v<ResultType>) {
+                        out_stream << result_val;
+                    }
+                    else {
+                        out_stream << std::setprecision(15) << result_val;
+                    }
+
+                    out_stream << " ожидалось: ";
+
+                    if constexpr (std::is_integral_v<ResultType>) {
+                        out_stream << expected_val;
+                    }
+                    else {
+                        out_stream << std::setprecision(15) << expected_val;
+                    }
+
+                    out_stream << " разница: " << std::scientific << std::setprecision(3) << diff
+                        << " время: " << duration << "us";
                 }
             }
             else {
-                // Для не-числовых типов - строковое сравнение
+                // Для не-числовых типов
                 std::string result_str = convert_result(result);
-                std::string args_str = "args: " + std::to_string(inputs.size());
 
                 if (result_str == expected) {
-                    std::cout << "Тест " << testNum << " OK: " << args_str
+                    out_stream << " OK: " << args_str  
                         << " результат: " << result_str
-                        << " время: " << duration << "us\n";
+                        << " время: " << duration << "us";
                 }
                 else {
-                    std::cout << "Тест " << testNum << " ОШИБКА: " << args_str
+                    out_stream << " ОШИБКА: " << args_str  
                         << " результат: " << result_str
                         << " ожидалось: " << expected
-                        << " время: " << duration << " us\n";
+                        << " время: " << duration << "us";
                 }
             }
         }
         catch (const std::exception& e) {
-            std::cout << "Тест " << testNum << " НЕ ВЫПОЛНЕН: " << args_str
-                << " ошибка: " << e.what() << "\n";
+            out_stream << " НЕ ВЫПОЛНЕН: " << args_str  
+                << " ошибка: " << e.what();
         }
+
+        std::cout << out_stream.str() << std::endl;
     }
     
     // Упрощенная версия для конкретных случаев (неуниверсальная)
