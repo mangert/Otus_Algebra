@@ -72,7 +72,7 @@ int main() {
 	Test<size_t, size_t> test_pr_l(prime_lim, "5.Primes");
 	test_pr_l.run();
 
-	std::cout << "\n-------------------------------------------------\n";*/
+	std::cout << "\n-------------------------------------------------\n";
 
 	std::cout << "* 3.c. Поиск простых чисел перебором четных делителeй до корня из n: Prime::count_primes(Prime::is_prime_optimized)" << "\n";
 
@@ -80,7 +80,7 @@ int main() {
 	Test<size_t, size_t> test_pr_opt(prime_opt, "5.Primes");
 	test_pr_opt.run();
 
-	std::cout << "\n-------------------------------------------------\n";
+	std::cout << "\n-------------------------------------------------\n"; */
 	
 	std::cout << "* 3.d. Поиск простых чисел перебором простых делителeй до корня из n: Prime::count_primes(Prime::is_prime_6k)" << "\n";
 

@@ -1,11 +1,43 @@
 ﻿# Отчет о выполнении домашнего задания
 
-1. Реализовать итеративный O(N) алгоритм возведения числа в степень: функция double static simple_pow(double base, uint64_t exp), ссылка: [./src/pow.cpp](pow.cpp)
+
+1. Реализовать **итеративный O(N)** алгоритм возведения числа в степень: функция double static simple_pow(double base, uint64_t exp), ссылка: [../src/pow.cpp](pow.cpp)
 2. Реализовать рекурсивный O(2^N) и итеративный O(N) алгоритмы поиска чисел Фибоначчи:
 	- рекурсивный: функция uint64_t static req_fibonacci(uint32_t n), ссылка: [./src/fib.cpp](fib.cpp)
 	- итеративный: функция uint64_t static iter_fibonacci(uint32_t n), ссылка: [./src/fib.cpp](fib.cpp)
 3. Реализовать алгоритм поиска количества простых чисел через перебор делителей, O(N^2): функция size_t static count_primes(size_t n, std::function<bool(size_t)> is_prime) 
 параметризованная функцией bool static is_prime_naive(size_t num), ссылка: [./src/primes.cpp](primes.cpp)
+## Реализованные алгоритмы
+
+### 1. Возведение в степень
+
+- **Итеративный алгоритм O(N)**: [`double static simple_pow(double base, uint64_t exp)`](../src/pow.cpp)  
+- **Алгоритм быстрого возведения O(log N)**: [`double static quick_pow(double base, uint64_t exp)`](../src/pow.cpp)
+- **Алгоритм через двоичное разложение O(log N)**: [`double static binary_pow(double base, uint64_t exp)`](../src/pow.cpp)
+
+### 2. Числа Фибоначчи
+
+- **Рекурсивный алгоритм O(2ᴺ)**: [`uint64_t static req_fibonacci(uint32_t n)`](../src/fib.cpp)
+- **Итеративный алгоритм O(N)**: [`uint64_t static iter_fibonacci(uint32_t n)`](../src/fib.cpp)  
+- **Матричный алгоритм O(log N)**: [`uint64_t static matrix_fibonacci(uint32_t n)`](../src/fib.cpp)
+- **Формула золотого сечения O(1)**: [`uint64_t static gold_fibonacci(uint32_t n)`](../src/fib.cpp)
+
+### 3. Поиск простых чисел
+
+- **Полный перебор делителей O(N²)**: [`size_t static count_primes(size_t n, std::function<bool(size_t)> is_prime)`](../src/primes.cpp)  
+  Параметризованная функцией [`bool static is_prime_naive(size_t num)`](../src/primes.cpp)
+
+- **Оптимизированный перебор O(N√N)**:  
+  Параметризованная функцией [`bool static is_prime_optimized(size_t num)`](../src/primes.cpp)
+
+- **Алгоритм 6k±1 O(N√N/3)**:  
+  Параметризованная функцией [`bool static is_prime_6k(size_t num)`](../src/primes.cpp)
+
+- **Решето Эратосфена O(N log log N)**: [`size_t static eratosphen(size_t n)`](../src/primes.cpp)
+
+- **Линейное решето Эратосфена O(N)**: [`size_t static eratosphen_linear(size_t n)`](../src/primes.cpp)
+
+- **Решето Эратосфена с битовой матрицей O(N log log N)**: [`size_t static eratosphen_bits(size_t n)`](../src/primes.cpp)
 
 
 
