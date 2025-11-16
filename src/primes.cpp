@@ -68,6 +68,10 @@ public:
 
     //подсчет количества простых чисел через простое решето Эратосфена
     size_t static eratosphen(size_t n)  {
+        
+        if (n > 100000000) {  // ограничение для больших n
+            throw std::runtime_error("n too large for sieve");
+        }
         std::vector<bool> sieve(n + 1, true);
         size_t count = 0;
         
@@ -122,6 +126,11 @@ public:
     //подсчет количества простых чисел через решето Эратосфена с линейным временем
     //(через формирование списка наименьших простых делителей)
     size_t static eratosphen_linear(size_t n) {
+        
+        if (n > 100000000) {  // ограничение для больших n
+            throw std::runtime_error("n too large for sieve");
+        }
+
         if (n < 2) return 0;
 
         std::vector<size_t> lp(n + 1, 0);  // lp[i] - наименьший простой делитель i

@@ -8,7 +8,7 @@
 // === main  ===
 int main() {
 	setlocale(LC_ALL, "Russian");	
-	/*
+
 	//1. Тестирование функций возведения в степень	
 	std::cout << "\n1. Возведение в степень" << "\n";
 	std::cout << "* 1.a. Итеративное возведение в степень: Pow::simple_pow" << "\n";
@@ -64,7 +64,7 @@ int main() {
 	Test<size_t, size_t> test_pr_n(prime_naive, "5.Primes");
 	test_pr_n.run();
 
-	std::cout << "\n-------------------------------------------------\n";	
+	std::cout << "\n-------------------------------------------------\n";
 
 	std::cout << "* 3.b. Поиск простых чисел перебором делителeй до корня из n: Prime::count_primes(Prime::is_prime_lim)" << "\n";
 
@@ -80,7 +80,7 @@ int main() {
 	Test<size_t, size_t> test_pr_opt(prime_opt, "5.Primes");
 	test_pr_opt.run();
 
-	std::cout << "\n-------------------------------------------------\n"; */
+	std::cout << "\n-------------------------------------------------\n"; 
 	
 	std::cout << "* 3.d. Поиск простых чисел перебором простых делителeй до корня из n: Prime::count_primes(Prime::is_prime_6k)" << "\n";
 
@@ -107,7 +107,7 @@ int main() {
 	std::cout << "* 3.g. Поиск простых чисел через решето Эратосфена c сохранением в битовой маске: Prime::eratosphen_linear" << "\n";
 
 	Test<size_t, size_t> test_pr_bit(Prime::eratosphen_bits_optimized, "5.Primes");
-	test_pr_el.run();
+	test_pr_bit.run();
 
 	std::cout << "\n-------------------------------------------------\n";
 	
