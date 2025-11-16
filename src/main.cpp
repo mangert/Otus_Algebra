@@ -8,7 +8,7 @@
 // === main  ===
 int main() {
 	setlocale(LC_ALL, "Russian");	
-	
+	/*
 	//1. Тестирование функций возведения в степень	
 	std::cout << "\n1. Возведение в степень" << "\n";
 	std::cout << "* 1.a. Итеративное возведение в степень: Pow::simple_pow" << "\n";
@@ -60,7 +60,7 @@ int main() {
 	std::cout << "\n3. Поиск количества простых чисел" << "\n";
 	std::cout << "* 3.a. Поиск простых чисел полным перебором делитетелeй: Prime::count_primes(Prime::is_prime_naive)" << "\n";
 	
-	auto prime_naive = [](size_t n) { return Prime::count_primes(n, Prime::is_prime_naive); };	
+	auto prime_naive = [](size_t n) { return Prime::count_primes(n, Prime::is_prime_naive); };
 	Test<size_t, size_t> test_pr_n(prime_naive, "5.Primes");
 	test_pr_n.run();
 
@@ -72,7 +72,7 @@ int main() {
 	Test<size_t, size_t> test_pr_l(prime_lim, "5.Primes");
 	test_pr_l.run();
 
-	std::cout << "\n-------------------------------------------------\n";
+	std::cout << "\n-------------------------------------------------\n";*/
 
 	std::cout << "* 3.c. Поиск простых чисел перебором четных делителeй до корня из n: Prime::count_primes(Prime::is_prime_optimized)" << "\n";
 

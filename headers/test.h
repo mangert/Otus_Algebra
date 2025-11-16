@@ -5,6 +5,7 @@
 #include <fstream>
 #include <chrono>
 #include <vector>
+#include <future>
 
 template<typename ResultType, typename... Args>
 class Test {
@@ -44,20 +45,19 @@ private:
         else if (inputs.size() == 2) {
             args_str = "base=" + inputs[0] + ", exp=" + inputs[1];
         }
-        //форматируем номер теста
+
         std::ostringstream out_stream;
         out_stream << "Тест " << std::setw(2) << std::setfill('0') << testNum;
-        
-        auto start = std::chrono::high_resolution_clock::now();
 
-        try {
-            //вызываем тестируемую функцию
-            auto result = call_function(inputs); 
+        auto start = std::chrono::high_resolution_clock::now();
+        
+        try {           
+
+            auto result = call_function(inputs);
             auto end = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();            
-            
-            //проверяем результат
-            // Для всех типов - численное сравнение
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+
+            // Проверяем результат
             if constexpr (std::is_arithmetic_v<ResultType>) {
                 ResultType result_val = result;
                 ResultType expected_val = static_cast<ResultType>(parse_double(expected));
@@ -73,63 +73,49 @@ private:
                 }
 
                 if (is_equal) {
-                    out_stream << " OK: " << args_str
-                        << " результат: ";
-
+                    out_stream << " OK: " << args_str << " результат: ";
                     if constexpr (std::is_integral_v<ResultType>) {
                         out_stream << result_val;
                     }
                     else {
                         out_stream << std::setprecision(15) << result_val;
                     }
-
                     out_stream << " время: " << duration << "us";
                 }
                 else {
                     double diff = std::abs(static_cast<double>(result_val) - static_cast<double>(expected_val));
-                    out_stream << " ОШИБКА: " << args_str
-                        << " результат: ";
-
+                    out_stream << " ОШИБКА: " << args_str << " результат: ";
                     if constexpr (std::is_integral_v<ResultType>) {
                         out_stream << result_val;
                     }
                     else {
                         out_stream << std::setprecision(15) << result_val;
                     }
-
                     out_stream << " ожидалось: ";
-
                     if constexpr (std::is_integral_v<ResultType>) {
                         out_stream << expected_val;
                     }
                     else {
                         out_stream << std::setprecision(15) << expected_val;
                     }
-
                     out_stream << " разница: " << std::scientific << std::setprecision(3) << diff
                         << " время: " << duration << "us";
                 }
             }
             else {
-                // Для не-числовых типов
                 std::string result_str = convert_result(result);
-
                 if (result_str == expected) {
-                    out_stream << " OK: " << args_str  
-                        << " результат: " << result_str
+                    out_stream << " OK: " << args_str << " результат: " << result_str
                         << " время: " << duration << "us";
                 }
                 else {
-                    out_stream << " ОШИБКА: " << args_str  
-                        << " результат: " << result_str
-                        << " ожидалось: " << expected
-                        << " время: " << duration << "us";
+                    out_stream << " ОШИБКА: " << args_str << " результат: " << result_str
+                        << " ожидалось: " << expected << " время: " << duration << "us";
                 }
             }
         }
-        catch (const std::exception& e) {
-            out_stream << " НЕ ВЫПОЛНЕН: " << args_str  
-                << " ошибка: " << e.what();
+        catch (const std::exception& e) {            
+            out_stream << " НЕ ВЫПОЛНЕН: " << args_str << " ошибка: " << e.what();
         }
 
         std::cout << out_stream.str() << std::endl;
