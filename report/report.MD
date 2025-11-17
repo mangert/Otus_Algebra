@@ -7,7 +7,8 @@
 	- **Итеративный алгоритм O(N)**: [`uint64_t static iter_fibonacci(uint32_t n)`](../src/fib.cpp)  
 3. **Полный перебор делителей O(N²)**: [`size_t static count_primes(size_t n, std::function<bool(size_t)> is_prime)`](../src/primes.cpp)  
   Параметризованная функцией [`bool static is_prime_naive(size_t num)`](../src/primes.cpp)
-Все пункты выполнены
+
+###Все пункты выполнены
 
 ### Часть 2
 21. **Алгоритм быстрого возведения O(log N) в степень**: [`double static quick_pow(double base, uint64_t exp)`](../src/pow.cpp)
@@ -21,7 +22,8 @@
 26. **Решето Эратосфена O(N log log N)**: [`size_t static eratosphen(size_t n)`](../src/primes.cpp)
 27. **Решето Эратосфена с битовой матрицей O(N log log N)**: [`size_t static eratosphen_bits(size_t n)`](../src/primes.cpp)
 28. **Линейное решето Эратосфена O(N)**: [`size_t static eratosphen_linear(size_t n)`](../src/primes.cpp)
-Все пункты выполнены
+
+###Все пункты выполнены
 
 ### Часть 3
 
