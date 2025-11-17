@@ -1,29 +1,29 @@
 ﻿# Отчет о выполнении домашнего задания
 
-### 1. Junior 
+### Часть 1 
 1. **Итеративный алгоритм O(N)** возведения числа в степень: [`double static simple_pow(double base, uint64_t exp)`](../src/pow.cpp)  
 2. Aлгоритмы поиска чисел Фибоначчи:
 	- **Рекурсивный алгоритм O(2ᴺ)**: [`uint64_t static req_fibonacci(uint32_t n)`](../src/fib.cpp)
 	- **Итеративный алгоритм O(N)**: [`uint64_t static iter_fibonacci(uint32_t n)`](../src/fib.cpp)  
 3. **Полный перебор делителей O(N²)**: [`size_t static count_primes(size_t n, std::function<bool(size_t)> is_prime)`](../src/primes.cpp)  
   Параметризованная функцией [`bool static is_prime_naive(size_t num)`](../src/primes.cpp)
+Все пункты выполнены
 
-### 2. Middle
+### Часть 2
 21. **Алгоритм быстрого возведения O(log N) в степень**: [`double static quick_pow(double base, uint64_t exp)`](../src/pow.cpp)
 22. **Алгоритм возвдедения в степень через двоичное разложение O(log N)**: [`double static binary_pow(double base, uint64_t exp)`](../src/pow.cpp)
 23. **Поиск чисел Фибоначчи по формула золотого сечения O(1)**: [`uint64_t static gold_fibonacci(uint32_t n)`](../src/fib.cpp)
 24. **Класс умножения матриц, возедение матрицы в степень**: [`Matrix<T> pow(uint32_t exp) const`](../headers/matrix.h)
 	**поиск чисел Фибоначчи через возведение матрицы в степень**: [`uint64_t static matrix_fibonacci(uint32_t n)`](../src/fib.cpp)	
-25. Оптимизированные алгоритмы поиска простых чисел
-	- **Оптимизированный перебор O(N√N)**:  			
-  Параметризованная функцией [`bool static is_prime_optimized(size_t num)`](../src/primes.cpp)
-	- **Алгоритм 6k±1 O(N√N/3)**:  
-  Параметризованная функцией [`bool static is_prime_6k(size_t num)`](../src/primes.cpp)	 
+25. Оптимизированные алгоритмы поиска простых чисел [`size_t static count_primes(size_t n, std::function<bool(size_t)> is_prime)`](../src/primes.cpp) 
+	- **Оптимизированный перебор O(N√N)**: Параметризованная функцией [`bool static is_prime_optimized(size_t num)`](../src/primes.cpp)
+	- **Алгоритм 6k±1 O(N√N/3)**: Параметризованная функцией [`bool static is_prime_6k(size_t num)`](../src/primes.cpp)	 
 26. **Решето Эратосфена O(N log log N)**: [`size_t static eratosphen(size_t n)`](../src/primes.cpp)
 27. **Решето Эратосфена с битовой матрицей O(N log log N)**: [`size_t static eratosphen_bits(size_t n)`](../src/primes.cpp)
 28. **Линейное решето Эратосфена O(N)**: [`size_t static eratosphen_linear(size_t n)`](../src/primes.cpp)
+Все пункты выполнены
 
-### 3. Senior
+### Часть 3
 
 31. **Шаблонный класс для тестов**: [`class Test`](../headers/test.h), консольный вывод результатов тестирования [`output.txt`](output.txt)
 32,33 Таблицы сравнения алгоритмов с выводами - в разделе Анализ производительности алгоритмов 
